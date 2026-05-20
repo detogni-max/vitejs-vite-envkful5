@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
-import type { ReactNode } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const fmt = (n) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
@@ -165,7 +164,7 @@ const mkClient = (url, key) => {
 const DEMO = [];
 
 // ─── Sparkline ────────────────────────────────────────────────────────────────
-function Sparkline({ data, up }: { data: number[], up: boolean }) {
+function Sparkline({ data, up }) {
   if (!data || data.length < 2) return null;
   const min = Math.min(...data), max = Math.max(...data);
   const W = 96, H = 32;
@@ -182,7 +181,7 @@ function Sparkline({ data, up }: { data: number[], up: boolean }) {
 // ─── Map (OpenStreetMap iframe + SVG marker overlay) ─────────────────────────
 const MAP_BOUNDS = { minLat:36.6, maxLat:47.1, minLng:6.6, maxLng:18.5 };
 
-function MapView({ properties, onSelect }: { properties: any[], onSelect?: (p: any) => void }) {
+function MapView({ properties, onSelect }) {
   const [tooltip, setTooltip] = useState(null);
   const [size, setSize] = useState({ w: 800, h: 480 });
   const containerRef = useRef();
@@ -272,7 +271,7 @@ function MapView({ properties, onSelect }: { properties: any[], onSelect?: (p: a
 }
 
 // ─── DropZone ─────────────────────────────────────────────────────────────────
-function DropZone({ label, icon, accept }: { label: string, icon: string, accept: string }) {
+function DropZone({ label, icon, accept }) {
   const [file, setFile] = useState(null);
   const ref = useRef();
   return (
@@ -285,7 +284,7 @@ function DropZone({ label, icon, accept }: { label: string, icon: string, accept
 }
 
 // ─── Address Autocomplete ─────────────────────────────────────────────────────
-function AddrInput({ value, onChange, onSelect }: { value: string, onChange: (v: string) => void, onSelect?: (s: any) => void }) {
+function AddrInput({ value, onChange, onSelect }) {
   const [q, setQ] = useState(value || "");
   const [sugg, setSugg] = useState([]);
   const [st, setSt] = useState("idle");
@@ -334,7 +333,7 @@ function AddrInput({ value, onChange, onSelect }: { value: string, onChange: (v:
 }
 
 // ─── Supabase Modal ───────────────────────────────────────────────────────────
-function SupabaseModal({ onClose, onSave }: { onClose: () => void, onSave: (client: any, rows: any[]) => void }) {
+function SupabaseModal({ onClose, onSave }) {
   const [url, setUrl] = useState("");
   const [key, setKey] = useState("");
   const [st, setSt] = useState("idle"); // idle | loading | ok | error
@@ -434,7 +433,7 @@ alter table properties disable row level security;`}</pre>
 }
 
 // ─── Catasto Modal ────────────────────────────────────────────────────────────
-function CatastoModal({ property, onClose, onUpdate }: { property: any, onClose: () => void, onUpdate?: (p: any) => void }) {
+function CatastoModal({ property, onClose, onUpdate }) {
   const [form, setForm] = useState({ codiceComune: property?.codiceComune||"", foglio: property?.foglio||"", particella: property?.particella||"", subalterno: property?.subalterno||"" });
   const [st, setSt] = useState(property?.catastoData ? "ok" : "idle");
   const [res, setRes] = useState(property?.catastoData || null);
@@ -473,7 +472,7 @@ function CatastoModal({ property, onClose, onUpdate }: { property: any, onClose:
 }
 
 // ─── Valuation Modal ──────────────────────────────────────────────────────────
-function ValuationModal({ property, onClose }: { property: any, onClose: () => void }) {
+function ValuationModal({ property, onClose }) {
   const [step, setStep] = useState("form");
   const [ex, setEx] = useState({ condizioni: "buone", piano: "", note: "" });
   const [res, setRes] = useState(null);
@@ -543,7 +542,7 @@ function ValuationModal({ property, onClose }: { property: any, onClose: () => v
 }
 
 // ─── Delete Modal ─────────────────────────────────────────────────────────────
-function DeleteModal({ property, onClose, onConfirm }: { property: any, onClose: () => void, onConfirm: () => void }) {
+function DeleteModal({ property, onClose, onConfirm }) {
   return (
     <Modal onClose={onClose} maxW={380}>
       <div style={{ textAlign:"center" }}>
@@ -562,7 +561,7 @@ function DeleteModal({ property, onClose, onConfirm }: { property: any, onClose:
 }
 
 // ─── Add Modal ────────────────────────────────────────────────────────────────
-function AddModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: any) => void }) {
+function AddModal({ onClose, onAdd }) {
   const [form, setForm] = useState({ name:"", address:"", citta:null, type:"Residenziale", mq:"", vani:"", purchasePrice:"", purchaseYear:new Date().getFullYear(), codiceComune:"", foglio:"", particella:"", subalterno:"", rendita:"", omiZona:"", omiMin:0, omiMax:0, lat:null, lng:null });
   const [gcd, setGcd] = useState(false);
   const set = (k,v) => setForm(p=>({...p,[k]:v}));
@@ -620,7 +619,7 @@ function AddModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: any) => 
 }
 
 // ─── Edit Modal ───────────────────────────────────────────────────────────────
-function EditModal({ property, onClose, onSave }: { property: any, onClose: () => void, onSave: (p: any) => void }) {
+function EditModal({ property, onClose, onSave }) {
   const [form, setForm] = useState({
     name: property.name || "",
     address: property.address || "",
@@ -733,7 +732,7 @@ function EditModal({ property, onClose, onSave }: { property: any, onClose: () =
 }
 
 
-function OMIPanel({ focus }: { focus?: any }) {
+function OMIPanel({ focus }) {
   const [city, setCity] = useState(focus?.citta || "Milano");
   const d = OMI_DATA[city];
   return (
@@ -777,7 +776,7 @@ function OMIPanel({ focus }: { focus?: any }) {
 }
 
 // ─── Property Card ────────────────────────────────────────────────────────────
-function PropertyCard({ p, onValue, onCatasto, onDelete, onEdit }: { p: any, onValue: (p: any) => void, onCatasto: (p: any) => void, onDelete: (p: any) => void, onEdit: (p: any) => void }) {
+function PropertyCard({ p, onValue, onCatasto, onDelete, onEdit }) {
   const gain = p.currentValue - p.purchasePrice;
   const up = gain >= 0;
   const omiVal = p.omiMin && p.mq ? Math.round((p.omiMin+p.omiMax)/2*p.mq) : null;
@@ -852,21 +851,21 @@ function PropertyCard({ p, onValue, onCatasto, onDelete, onEdit }: { p: any, onV
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 const inputStyle = { width:"100%", background:"#fff", border:"1px solid #e0e0e0", color:"#1a1a1a", borderRadius:8, padding:"9px 12px", fontSize:13, boxSizing:"border-box" };
-const Label = ({ children }: { children: ReactNode }) => <label style={{ color:"#888", fontSize:9, display:"block", marginBottom:4, letterSpacing:1.5, textTransform:"uppercase" }}>{children}</label>;
-const Field = ({ label, value, onChange, ph, type="text" }: { label: string, value: string|number, onChange: (v: string) => void, ph: string, type?: string }) => (
+const Label = ({ children }) => <label style={{ color:"#888", fontSize:9, display:"block", marginBottom:4, letterSpacing:1.5, textTransform:"uppercase" }}>{children}</label>;
+const Field = ({ label, value, onChange, ph, type="text" }) => (
   <div><Label>{label}</Label><input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={ph} style={inputStyle}/></div>
 );
-const Btn = ({ children, onClick, disabled, variant, style:s }: { children: ReactNode, onClick?: () => void, disabled?: boolean, variant?: string, style?: React.CSSProperties }) => (
+const Btn = ({ children, onClick, disabled, variant, style:s }) => (
   <button onClick={onClick} disabled={disabled} style={{ background:variant==="ghost"?"#fff":"linear-gradient(135deg,#b8922a,#96720e)", color:variant==="ghost"?"#666":"#fff", border:variant==="ghost"?"1px solid #e0e0e0":"none", borderRadius:9, padding:"11px 18px", fontWeight:700, fontSize:13, cursor:disabled?"not-allowed":"pointer", opacity:disabled?.4:1, width:"100%", transition:"opacity .15s", ...s }}>{children}</button>
 );
-const Loader = ({ text }: { text: string }) => (
+const Loader = ({ text }) => (
   <div style={{ textAlign:"center", padding:"40px 0" }}>
     <div style={{ width:44, height:44, border:"2.5px solid #e8e8e8", borderTop:"2.5px solid #b8922a", borderRadius:"50%", animation:"spin 1s linear infinite", margin:"0 auto 16px" }}/>
     <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     <div style={{ color:"#999", fontSize:12 }}>{text}</div>
   </div>
 );
-const Modal = ({ children, onClose, title, subtitle, icon, maxW=600 }: { children: ReactNode, onClose: () => void, title?: string, subtitle?: string, icon?: string, maxW?: number }) => (
+const Modal = ({ children, onClose, title, subtitle, icon, maxW=600 }) => (
   <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.4)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:20 }}>
     <div style={{ background:"#fff", border:"1px solid #e8e8e8", borderRadius:18, width:"100%", maxWidth:maxW, maxHeight:"90vh", overflowY:"auto", padding:32, position:"relative", boxShadow:"0 20px 60px rgba(0,0,0,.12)" }}>
       <button onClick={onClose} style={{ position:"absolute", top:16, right:16, background:"none", border:"1px solid #e8e8e8", color:"#aaa", borderRadius:7, padding:"3px 10px", cursor:"pointer", fontSize:12 }}>✕</button>
